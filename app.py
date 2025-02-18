@@ -33,6 +33,11 @@ def index():
     dataset_exists = Dataset.query.first() is not None
     return render_template('index.html', dataset_exists=dataset_exists)
 
+@app.route('/chapters')
+def chapters():
+    return render_template('chapters.html')
+
+
 # Upload Dataset
 @app.route('/upload', methods=['POST'])
 def upload_file():
