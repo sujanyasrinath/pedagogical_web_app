@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pedagogical Web App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .alert {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            border-radius: 5px;
+        }
+
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="text-center overlay">
+            <h1 class="fw-bold">Welcome to the Pedagogical Web App</h1>
+            <p class="lead">Upload a dataset to get started with assignment generation.</p>
+
+            <!-- ✅ Success/Error Message Display -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- ✅ Dataset Upload Form -->
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="dataset" class="form-label">Upload Your Dataset (CSV Only)</label>
+                    <input type="file" class="form-control" name="dataset" accept=".csv" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Upload & Process</button>
+            </form>
+
+            <hr class="my-4">
+
+            <!-- ✅ Disabled "Get Started" Button Until Dataset is Uploaded -->
+            <a href="{{ url_for('chapters') }}" 
+               class="btn btn-primary btn-lg mt-3 {% if not dataset_exists %}btn-disabled{% endif %}" 
+               id="get-started-btn">
+               Get Started
+            </a>
+
+            <!-- ✅ Informative Message If Button is Disabled -->
+            {% if not dataset_exists %}
+                <p class="text-warning mt-2">⚠ Please upload a dataset first to enable this button.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let getStartedBtn = document.getElementById("get-started-btn");
+            let datasetUploaded = "{{ dataset_exists }}" === "True";
+
+            if (!datasetUploaded) {
+                getStartedBtn.classList.add("btn-disabled");
+            } else {
+                getStartedBtn.classList.remove("btn-disabled");
+            }
+        });
+    </script>
+</body>
+</html>
