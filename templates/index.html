@@ -49,7 +49,7 @@
             {% endwith %}
 
             <!-- ✅ Dataset Upload Form -->
-            <form action="/upload" method="POST" enctype="multipart/form-data">
+            <form action="/dataset/upload" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="dataset" class="form-label">Upload Your Dataset (CSV Only)</label>
                     <input type="file" class="form-control" name="dataset" accept=".csv" required>
@@ -61,7 +61,7 @@
             <hr class="my-4">
 
             <!-- ✅ Disabled "Get Started" Button Until Dataset is Uploaded -->
-            <a href="{{ url_for('chapters') }}" 
+            <a href="/chapters" 
                class="btn btn-primary btn-lg mt-3 {% if not dataset_exists %}btn-disabled{% endif %}" 
                id="get-started-btn">
                Get Started

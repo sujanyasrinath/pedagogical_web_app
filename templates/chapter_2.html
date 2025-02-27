@@ -11,7 +11,7 @@
         <h1 class="text-center">📊 Chapter 2: Data Cleaning</h1>
         <p class="text-center">Select a dataset to start working on the assignment.</p>
 
-        <form action="{{ url_for('confirm_dataset_chapter2') }}" method="POST">
+        <form action="/chapters/2/dataset/confirm" method="POST">
             <div class="mb-3">
                 <label for="selected_dataset" class="form-label">Select a dataset:</label>
                 <select class="form-control" name="selected_dataset" required>
@@ -30,14 +30,14 @@
             <div class="alert alert-success mt-3">
                 ✅ Using dataset: <strong>{{ selected_dataset }}</strong>
             </div>
-            <a href="{{ url_for('generate_word_chapter_2') }}" class="btn btn-success mt-3">Generate Word Document</a>
+            <a href="/chapters/2/generate/word" class="btn btn-success mt-3">Generate Word Document</a>
         {% else %}
             <div class="alert alert-warning mt-3">
                 ⚠ Please select a dataset before generating the Word document.
             </div>
         {% endif %}
 
-        <a href="{{ url_for('chapters') }}" class="btn btn-secondary mt-3">⬅ Back to Chapters</a>
+        <a href="/chapters" class="btn btn-secondary mt-3">⬅ Back to Chapters</a>
     </div>
 </body>
 </html>
