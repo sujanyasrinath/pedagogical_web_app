@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chapters</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">📖 Select a Chapter</h1>
+        <p class="text-center">Choose a chapter to begin generating assignments.</p>
+        <hr>
+
+        <div class="row justify-content-center">
+            {% for chapter in chapters_list %}
+                <div class="col-md-4 mb-4">
+                    <div class="card p-3 text-center">
+                        <h5 class="card-title">Chapter {{ chapter.index }}</h5>
+                        <p class="card-text">{{ chapter.description }}</p>
+                        <a href="{{ chapter.url }}" 
+                           class="btn btn-primary">Start</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
