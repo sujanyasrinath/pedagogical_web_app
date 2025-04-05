@@ -72,7 +72,7 @@ def create_chapter_3_document(doc, selected_dataset, chapter_3_details, show_ans
     dataset = Dataset.query.filter_by(filename=selected_dataset).first()
     df = pd.read_json(StringIO(dataset.data))  # ✅ FIX: Read JSON correctly
 
-    doc.add_heading('Chapter 3: Data Cleaning', level=1)
+    doc.add_heading('Chapter 3: Making Sense through Data Visualization', level=1)
     doc.add_paragraph(f'Selected Dataset: {selected_dataset}')
 
     # Data Summary
@@ -117,6 +117,8 @@ def create_chapter_3_document(doc, selected_dataset, chapter_3_details, show_ans
         os.makedirs(os.path.dirname(cleaned_path), exist_ok=True)  # Ensure directory exists
         cleaned_df.to_csv(cleaned_path, index=False)
         doc.add_paragraph(f"📂 Cleaned Dataset: {cleaned_path}")
+
+
 
 def create_chapter_4_document(doc, selected_dataset, chapter_4_details, show_answer=False):
     dataset = Dataset.query.filter_by(filename=selected_dataset).first()

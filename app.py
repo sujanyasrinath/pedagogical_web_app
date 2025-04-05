@@ -60,5 +60,7 @@ def upload_file():
     flash("❌ Invalid file format. Please upload a CSV file.", "error")
     return redirect('/')
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
