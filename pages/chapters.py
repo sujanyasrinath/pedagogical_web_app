@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, render_template, request, redirect, send_file, session
 from docx import Document
+from docx.shared import Pt
 
 from docx.shared import Inches
 from .utils.dataset import Dataset
@@ -14,6 +15,7 @@ import os
 import io
 import base64
 from io import StringIO
+import random
 
 def save_plot_image(plot_func, filename, df_column, **kwargs):
     """Helper function to generate a plot and save it as an image file."""
@@ -41,10 +43,125 @@ def create_chapter_1_document(doc, selected_dataset, chapter_1_details, show_ans
     dataset = Dataset.query.filter_by(filename=selected_dataset).first()
     df = pd.read_json(dataset.data)
 
-    doc.add_heading(chapter_1_details['question'])
+    course = chapter_1_details.get('course')
+    question = chapter_1_details.get('question')
+
     if show_answer:
-        doc.add_paragraph('THIS IS AN ANSWER KEY')
+        doc.add_heading(f'{course} Chapter 1 Answer Key', level=1)
+    else:
+        doc.add_heading(f'{course} Chapter 1 Assignment', level=1) #add in course name from input
+        doc.add_paragraph('Student Name:')
+        doc.add_paragraph('Date:')
+
     doc.add_paragraph(f'Selected Dataset: {selected_dataset}')
+
+    # doc.add_heading('Section 1: Research Question', level=2)
+    # doc.add_paragraph("Answer the following research question")
+    # doc.add_paragraph(question)
+
+    # doc.add_heading('Section 2: Metadata File', level=2)
+    # doc.add_paragraph("Review the partially completed metadata table below. Fill in the missing pieces based on your understanding of the dataset.")
+    # #add manipulated metadata file from input dataset here
+
+    # doc.add_heading('Section 3: STAR Framework - Dataset Overview', level=2)
+    # doc.add_paragraph("Use the STAR framework to describe the dataset and its context. Write a short paragraph for each component.")
+    # #add dataset provided from input here
+
+    # Section 1
+    doc.add_heading('Section 1: Research Question', level=2)
+
+    instruction_para = doc.add_paragraph()
+    instruction_run = instruction_para.add_run("Answer the following research question")
+    instruction_run.italic = True
+
+    response_para = doc.add_paragraph()
+    response_run = response_para.add_run(question)
+    response_run.bold = False
+    response_run.font.size = Pt(12)
+
+    if show_answer:
+        doc.add_paragraph("Custom grading per student")
+
+    # Section 2
+    doc.add_heading('Section 2: Metadata File', level=2)
+    metadata_para = doc.add_paragraph()
+    metadata_run = metadata_para.add_run("Review the partially completed metadata table below. Fill in the missing pieces based on your understanding of the dataset.")
+    metadata_run.italic = True
+
+    # You could insert a table here for metadata
+#     metadata_table = doc.add_table(rows=1, cols=5)
+#     metadata_table.style = 'Table Grid'
+#     hdr_cells = metadata_table.rows[0].cells
+#     headers = ['Variable Name', 'Description', 'Data Type', 'Example Value', 'Units / Notes']
+#     for i, header in enumerate(headers):
+#         hdr_cells[i].text = header
+
+# # Add rows from dataset with some missing values for students to complete
+#     for col in df.columns:
+#         row_cells = metadata_table.add_row().cells
+#         row_cells[0].text = col  # Variable Name
+#         row_cells[1].text = ''   # Description - leave blank
+#         row_cells[2].text = str(df[col].dtype)  # Data Type
+#         example_value = df[col].dropna().iloc[0] if not df[col].dropna().empty else ''
+#         row_cells[3].text = str(example_value)  # Example Value
+#         row_cells[4].text = ''   # Units / Notes - leave blank
+    metadata_table = doc.add_table(rows=1, cols=5)
+    metadata_table.style = 'Table Grid'
+    hdr_cells = metadata_table.rows[0].cells
+    headers = ['Variable Name', 'Description', 'Data Type', 'Example Value', 'Units / Notes']
+    for i, header in enumerate(headers):
+        hdr_cells[i].text = header
+
+# Prepare initial data rows (fill in everything first)
+    rows_data = []
+    for col in df.columns:
+        example_value = df[col].dropna().iloc[0] if not df[col].dropna().empty else ''
+        rows_data.append([
+            col,                         # Variable Name (always filled)
+            'Description goes here',     # Description (can be blanked)
+            str(df[col].dtype),          # Data Type (can be blanked)
+            str(example_value),          # Example Value (can be blanked)
+            'Units or notes here'        # Units / Notes (can be blanked)
+        ])
+
+    # Create list of cell indices to potentially blank (row index, column index)
+    # Only blank columns 1–4 (i.e., skip Variable Name)
+    editable_indices = [(i, j) for i in range(len(rows_data)) for j in range(1, 5)]
+
+    # Blank about 30% of all editable cells
+    num_to_blank = int(len(editable_indices) * 0.3)
+    blank_indices = random.sample(editable_indices, num_to_blank)
+
+    # Apply the blanking
+    if not show_answer:
+        for i, j in blank_indices:
+            rows_data[i][j] = ''
+
+    # Add rows to the Word table
+    for row in rows_data:
+        row_cells = metadata_table.add_row().cells
+        for i, val in enumerate(row):
+            row_cells[i].text = val
+
+    # Section 3
+    doc.add_heading('Section 3: STAR Framework - Dataset Overview', level=2)
+    star_para = doc.add_paragraph()
+    star_run = star_para.add_run("Use the STAR framework to describe the dataset and its context. Write a short paragraph for each component.")
+    star_run.italic = True
+
+    if show_answer:
+        doc.add_paragraph("Custom grading per student")
+
+    doc.add_heading('Download the Dataset', level=2)
+    doc.add_paragraph(
+        "You can download the dataset using the following link:"
+    )
+
+    dataset_url = f"{request.host_url}static/uploads/{selected_dataset}"
+
+    # Replace this with your actual download link logic
+    doc.add_paragraph(dataset_url)
+
 
 def create_chapter_2_document(doc, selected_dataset, chapter_2_details, show_answer=False):
     dataset = Dataset.query.filter_by(filename=selected_dataset).first()
@@ -331,7 +448,7 @@ def generate_word_for_chapter(index, q_key):
     word_path = os.path.join("static", "generated", filename)
 
     doc = Document()
-    doc.add_heading(f'Chapter {index} Assignment', level=1)
+    # doc.add_heading(f'Chapter {index} Assignment', level=1)
 
     props = {
         "show_answer": q_key == 'answer'

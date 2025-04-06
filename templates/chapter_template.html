@@ -21,7 +21,7 @@
 
         <form action="/chapters/{{ meta.chapter_number }}/dataset/confirm" method="POST">
             <div class="mb-3">
-                <label for="selected_dataset" class="form-label">Select a dataset:</label>
+                <h4>Select a dataset</h4>
                 <select class="form-control" name="selected_dataset" required>
                     <option value="" disabled selected>Choose a dataset</option>
                     {% for dataset in meta.datasets %}
