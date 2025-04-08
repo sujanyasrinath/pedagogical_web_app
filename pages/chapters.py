@@ -40,15 +40,71 @@ def save_plot_image(plot_func, filename, df_column, **kwargs):
 
     return img_path
 
+# chapters = Blueprint("chapters/", __name__, url_prefix="/chapters")
+
+# ALL_CHAPTERS = [
+#     {
+#         "index": i,
+#         "description": f"Description for Chapter {i}",
+#         "url": f'/chapters/{i}'
+#     } for i in range(1, 11)
+# ]
+
 chapters = Blueprint("chapters/", __name__, url_prefix="/chapters")
 
 ALL_CHAPTERS = [
     {
-        "index": i,
-        "description": f"Description for Chapter {i}",
-        "url": f'/chapters/{i}'
-    } for i in range(1, 11)
+        "index": 1,
+        "description": "Introduction to the dataset and variable identification.",
+        "url": "/chapters/1"
+    },
+    {
+        "index": 2,
+        "description": "Data cleaning and preprocessing steps.",
+        "url": "/chapters/2"
+    },
+    {
+        "index": 3,
+        "description": "Exploratory data analysis and visualization.",
+        "url": "/chapters/3"
+    },
+    {
+        "index": 4,
+        "description": "Research framing, metadata, and narrative construction.",
+        "url": "/chapters/4"
+    },
+    {
+        "index": 5,
+        "description": "Correlation and association analysis.",
+        "url": "/chapters/5"
+    },
+    {
+        "index": 6,
+        "description": "Introduction to modeling techniques.",
+        "url": "/chapters/6"
+    },
+    {
+        "index": 7,
+        "description": "Model building and performance evaluation.",
+        "url": "/chapters/7"
+    },
+    {
+        "index": 8,
+        "description": "Validation and improvement of predictive models.",
+        "url": "/chapters/8"
+    },
+    {
+        "index": 9,
+        "description": "Presentation of results and storytelling with data.",
+        "url": "/chapters/9"
+    },
+    {
+        "index": 10,
+        "description": "Final project synthesis and reflection.",
+        "url": "/chapters/10"
+    },
 ]
+
 
 def create_chapter_1_document(doc, selected_dataset, chapter_1_details, show_answer=False):
     dataset = Dataset.query.filter_by(filename=selected_dataset).first()
@@ -65,18 +121,6 @@ def create_chapter_1_document(doc, selected_dataset, chapter_1_details, show_ans
         doc.add_paragraph('Date:')
 
     doc.add_paragraph(f'Selected Dataset: {selected_dataset}')
-
-    # doc.add_heading('Section 1: Research Question', level=2)
-    # doc.add_paragraph("Answer the following research question")
-    # doc.add_paragraph(question)
-
-    # doc.add_heading('Section 2: Metadata File', level=2)
-    # doc.add_paragraph("Review the partially completed metadata table below. Fill in the missing pieces based on your understanding of the dataset.")
-    # #add manipulated metadata file from input dataset here
-
-    # doc.add_heading('Section 3: STAR Framework - Dataset Overview', level=2)
-    # doc.add_paragraph("Use the STAR framework to describe the dataset and its context. Write a short paragraph for each component.")
-    # #add dataset provided from input here
 
     # Section 1
     doc.add_heading('Section 1: Research Question', level=2)
@@ -99,23 +143,7 @@ def create_chapter_1_document(doc, selected_dataset, chapter_1_details, show_ans
     metadata_run = metadata_para.add_run("Review the partially completed metadata table below. Fill in the missing pieces based on your understanding of the dataset.")
     metadata_run.italic = True
 
-    # inserting a table here for metadata
-#     metadata_table = doc.add_table(rows=1, cols=5)
-#     metadata_table.style = 'Table Grid'
-#     hdr_cells = metadata_table.rows[0].cells
-#     headers = ['Variable Name', 'Description', 'Data Type', 'Example Value', 'Units / Notes']
-#     for i, header in enumerate(headers):
-#         hdr_cells[i].text = header
 
-# # Add rows from dataset with some missing values for students to complete
-#     for col in df.columns:
-#         row_cells = metadata_table.add_row().cells
-#         row_cells[0].text = col  # Variable Name
-#         row_cells[1].text = ''   # Description - leave blank
-#         row_cells[2].text = str(df[col].dtype)  # Data Type
-#         example_value = df[col].dropna().iloc[0] if not df[col].dropna().empty else ''
-#         row_cells[3].text = str(example_value)  # Example Value
-#         row_cells[4].text = ''   # Units / Notes - leave blank
     metadata_table = doc.add_table(rows=1, cols=5)
     metadata_table.style = 'Table Grid'
     hdr_cells = metadata_table.rows[0].cells
@@ -192,7 +220,7 @@ def create_chapter_2_document(doc, selected_dataset, chapter_2_details, show_ans
 
     if show_answer:
         doc.add_heading(f'{course} Chapter 2 Answer Key', level=1)
-        doc.add_heading("Final Cleaned Dataset with All Tasks Applied", level=2)
+        #doc.add_heading("Final Cleaned Dataset with All Tasks Applied", level=2)
         final_df = df.copy()
     else:
         doc.add_heading(f'{course} Chapter 2 Assignment', level=1) #add in course name from input
@@ -276,44 +304,6 @@ def create_chapter_2_document(doc, selected_dataset, chapter_2_details, show_ans
         doc.add_heading('Section 3: Clean Incorrect Formats', level=2)
         doc.add_paragraph('Below are the replacement rules that are provided. Apply these cleaning rules to the dataset to standardize the values in the selected column. Once this task is done answer the following questions')
 
-        # fuzzy matching to get pairs
-        # Get the column the professor wants to work with
-        # column_to_clean = df[task_3].dropna().astype(str)
-
-        # # Get unique values in the column
-        # unique_values = column_to_clean.unique()
-
-        # # Set a similarity threshold
-        # SIMILARITY_THRESHOLD = 85
-
-        # # Generate groups of similar values
-        # corrections = {}
-        # for value in unique_values:
-        #     # Skip if this value is already a "correction"
-        #     if value in corrections.values():
-        #         continue
-        #     matches = process.extract(value, unique_values, scorer=fuzz.ratio, limit=10)
-        #     for match, score, _ in matches:
-        #         if match != value and score >= SIMILARITY_THRESHOLD:
-        #             corrections[match] = value  # match → correct value
-
-        # # Create a DataFrame for the correction pairs
-        # corrections_df = pd.DataFrame(list(corrections.items()), columns=["Incorrect Text", "Corrected Text"])
-
-        # # Add the table to the Word doc
-        # if not corrections_df.empty:
-        #     table = doc.add_table(rows=1, cols=2)
-        #     table.style = 'Table Grid'
-        #     hdr_cells = table.rows[0].cells
-        #     hdr_cells[0].text = 'Incorrect Text'
-        #     hdr_cells[1].text = 'Corrected Text'
-
-        #     for _, row in corrections_df.iterrows():
-        #         row_cells = table.add_row().cells
-        #         row_cells[0].text = str(row["Incorrect Text"])
-        #         row_cells[1].text = str(row["Corrected Text"])
-        # else:
-        #     doc.add_paragraph("No similar entries were found to suggest corrections.")
         column_to_clean = task_3  # e.g., "country"
         df["normalized_column"] = df[column_to_clean].dropna().astype(str).apply(normalize)
 
@@ -332,39 +322,7 @@ def create_chapter_2_document(doc, selected_dataset, chapter_2_details, show_ans
         correct_values = value_counts[value_counts >= MIN_FREQ_FOR_CORRECT].index.tolist()
         suspect_values = value_counts[value_counts <= MAX_FREQ_FOR_INCORRECT].index.tolist()
 
-        # corrections = {}
-
-        # # for suspect in suspect_values:
-        # #     match, score, _ = process.extractOne(suspect, correct_values, scorer=fuzz.ratio)
-        # #     if score >= FUZZY_THRESHOLD:
-        # #         corrections[suspect] = match
-
-        # for suspect in suspect_values:
-        #     result = process.extractOne(suspect, correct_values, scorer=fuzz.ratio)
-        #     if result:
-        #         match, score, _ = result
-        #         if score >= FUZZY_THRESHOLD:
-        #             corrections[suspect] = match
-        
-        # corrections_df = pd.DataFrame(list(corrections.items()), columns=["Incorrect Text", "Corrected Text"])
-        #     # Check if corrections_df has any rows
-        # if not corrections_df.empty:
-        #     # Create a table in the Word doc with header row
-        #     table = doc.add_table(rows=1, cols=len(corrections_df.columns))
-        #     table.style = 'Table Grid'
-
-        #     # Set headers
-        #     hdr_cells = table.rows[0].cells
-        #     for idx, col_name in enumerate(corrections_df.columns):
-        #         hdr_cells[idx].text = col_name
-
-        #     # Add data rows
-        #     for _, row in corrections_df.iterrows():
-        #         row_cells = table.add_row().cells
-        #         for idx, value in enumerate(row):
-        #             row_cells[idx].text = str(value)
-        # else:
-        #     doc.add_paragraph("No replacement pairs were detected.")
+       
         corrections = {}
         for suspect in suspect_values:
             result = process.extractOne(suspect, correct_values, scorer=fuzz.ratio)
@@ -487,44 +445,7 @@ def create_chapter_2_document(doc, selected_dataset, chapter_2_details, show_ans
         doc.add_paragraph(f"Number of times '{common_val}' appeared before cleaning: {x_count}")
         doc.add_paragraph(f"Number of times other values appeared: {y_count}")
     if show_answer:
-        # doc.add_heading("Final Cleaned Dataset with All Tasks Applied", level=2)
-        # final_df = df.copy()
-
-        # # Task 1: Remove duplicates
-        # final_df = final_df.drop_duplicates()
-        # original_count = len(df)
-        # doc.add_paragraph(f"Section 1\nNumber of rows in original dataset: {original_count}")
-
-        # # Task 2: Impute mean into 10% missing numeric values
-        # for col in final_df.select_dtypes(include='number').columns:
-        #     n_missing = int(len(final_df) * 0.1)
-        #     missing_indices = final_df.sample(n=n_missing).index
-        #     final_df.loc[missing_indices, col] = None
-        #     mean_val = final_df[col].mean()
-        #     final_df[col].fillna(mean_val, inplace=True)
-        # doc.add_paragraph("Section 2\nThe dataset shown above has the imputed values in italics. Grade based on comparison between student dataset and dataset shown above.")
-
-        # # Task 3: Clean incorrect text formats
-        # text_col = task_3
-        # final_df[text_col] = final_df[text_col].astype(str).apply(normalize)
-        # doc.add_paragraph("Section 3\nThe dataset shown above has the incorrect formats cleaned. Grade based on comparison between student dataset and dataset shown above.")
-
-        # # Task 4: Categorize numeric column using auto-threshold
-        # cat_col = task_4
-        # thresholds = pd.qcut(final_df[cat_col], 3, labels=["Low", "Medium", "High"])
-        # final_df[f"{cat_col}_category"] = thresholds
-        # doc.add_paragraph("Section 4\nThe dataset shown above has the categorized values in italics. Grade based on comparison between student dataset and dataset shown above.")
-
-        # # Task 5: Boolean from most common value
-        # bool_col = task_5
-        # common_val = final_df[bool_col].value_counts().idxmax()
-        # final_df[f"{bool_col}_is_{common_val}"] = final_df[bool_col] == common_val
-        # x_count = (final_df[bool_col] == common_val).sum()
-        # y_count = len(final_df) - x_count
-
-        # doc.add_paragraph("Section 5\nThe dataset shown above has a new column representing a boolean variable. Grade based on comparison between student dataset and dataset shown above.")
-        # doc.add_paragraph(f"Number of times '{common_val}' appeared before cleaning: {x_count}")
-        # doc.add_paragraph(f"Number of times other values appeared: {y_count}")
+       
 
         # Save cleaned dataset
         final_path = os.path.join("static", "csv", f"chapter2_answer_{selected_dataset}")
@@ -553,7 +474,7 @@ def create_chapter_3_document(doc, selected_dataset, chapter_3_details, show_ans
         return re.sub(r'[^\w\s]', '', text).strip().lower()  # remove punctuation, trim, lower
     
 
-    doc.add_heading("Final Cleaned Dataset with All Tasks Applied", level=2)
+    #doc.add_heading("Final Cleaned Dataset with All Tasks Applied", level=2)
     final_df = df.copy()
 
     # Task 1: Remove duplicates

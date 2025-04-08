@@ -2,35 +2,39 @@
 
 {% block title %}
     <h1 class="text-center">📊 Chapter 2: Data Cleaning</h1>
-    
+    <h6>In this chapter, we will focus on data cleaning and transformation tasks: removing duplicates, handling missing values with mean imputation, fixing text formatting issues, and creating new categorical and Boolean variables from existing columns. Please enter your inputs below to generate the assignment and answer documents.</h6>
+
 {% endblock %}
 
 {% block content %}
 <form method="post">
-    <h4>Enter Course name</h4>
+    <h5>Enter Course name</h5>
     <input name="course"/>
     <br/><br/>
-    <h4>Please choose a text variable column to use for task 3: cleaning inconsistent data</h4>
+    <h5>Please choose a text variable to use for task 3: cleaning inconsistent data</h5>
     <select name="task3" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in text_cols %}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-    <h4>Please choose a variable column to use for task 4: creating a new categorical column</h4>
+    <br/><br/>
+    <h5>Please choose a numerical variable to use for task 4: creating a new categorical column</h5>
     <select name="task4" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in numeric_cols %}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-    <h4>Please choose a numerical variable column to use for task 5: Creating a Boolean Variable that Represents a Categorical Variable</h4>
+    <br/><br/>
+    <h5>Please choose a text variable to use for task 5: Creating a Boolean Variable that Represents a Categorical Variable</h5>
     <select name="task5" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in text_cols%}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
+    <br/><br/>
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
 {% endblock %}

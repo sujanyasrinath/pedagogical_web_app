@@ -2,6 +2,8 @@
 
 {% block title %}
     <h1 class="text-center">📊 Chapter 3: Making Sense through Data Visualization</h1>
+    <h6>In this chapter, we will ask students to create and interpret a variety of visualizations, including histograms, box plots, scatterplots, and more, based on selected variables. Please choose which tasks and variables to include below to generate the assignment and answer documents.</h6>
+
 {% endblock %}
 
 {% block content %}
@@ -10,30 +12,31 @@
     <input name="course"/>
     <br/><br/>
 
-    <h4>Please choose a text variable column to use for task 3: cleaning inconsistent data to clean the data</h4>
+    <h5>Please choose a text variable to use for task 3: cleaning inconsistent data</h5>
     <select name="task3" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in text_cols %}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-
-    <h4>Please choose a variable column to use for task 4: creating a new categorical column to clean the data</h4>
+    <br/><br/>
+    <h5>Please choose a numerical variable to use for task 4: creating a new categorical column</h5>
     <select name="task4" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in numeric_cols %}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-    <h4>Please choose a numerical variable column to use for task 5: Creating a Boolean Variable that Represents a Categorical Variable to clean the data</h4>
+    <br/><br/>
+    <h5>Please choose a text variable to use for task 5: Creating a Boolean Variable that Represents a Categorical Variable</h5>
     <select name="task5" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in text_cols%}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-    
-    <h4>Select the types of plots you want:</h4>
+    <br/><br/>
+    <h5>Select the types of plots you want:</h5>
     <div id="plot-options">
       <label><input type="checkbox" name="plot_types" value="Histogram"> Histogram</label><br>
       <label><input type="checkbox" name="plot_types" value="Density Plot"> Density Plot</label><br>
@@ -45,21 +48,23 @@
       <label><input type="checkbox" name="plot_types" value="Scatterplot"> Scatterplot</label><br>
       <label><input type="checkbox" name="plot_types" value="Bubble Chart"> Bubble Chart</label><br>
     </div>
-
-    <h4>Please choose a variable column to use for the X axis of the plot</h4>
+    <br/><br/>
+    <h5>Please choose a variable column to use for the X axis of the plot</h5>
     <select name="selectingx" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in all_columns%}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
-    <h4>Please choose a variable column to use for the Y axis of the plot</h4>
+    <br/><br/>
+    <h5>Please choose a variable column to use for the Y axis of the plot</h5>
     <select name="selectingy" id="column-select">
         <option value="" disabled selected>-- Select a column --</option>
         {% for col in all_columns%}
           <option value="{{ col }}">{{ col }}</option>
         {% endfor %}
     </select>
+    <br/><br/>
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 
 
