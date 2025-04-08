@@ -5,4 +5,77 @@
 {% endblock %}
 
 {% block content %}
+<form method="post">
+    <h4>Enter Course name</h4>
+    <input name="course"/>
+    <br/><br/>
+    <h4>Next 3 variables are for the data cleaning step</h4>
+
+    <h4>Please choose a text variable column to use for task 3: cleaning inconsistent data to clean the data</h4>
+    <select name="task3" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in text_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+
+    <h4>Please choose a variable column to use for task 4: creating a new categorical column to clean the data</h4>
+    <select name="task4" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in numeric_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+    <h4>Please choose a numerical variable column to use for task 5: Creating a Boolean Variable that Represents a Categorical Variable to clean the data</h4>
+    <select name="task5" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in text_cols%}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+    <h4>Next variables are for the the tasks in chapter 4 specifically</h4>
+    <h4>Please choose a numeric column to perform calculations</h4>
+    <select name="ch4_t1" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in numeric_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+
+    <h4>Please choose a numeric variable for the x axis of a scatterplot</h4>
+    <select name="ch4_scatter_x" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in numeric_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+    <h4>Please choose a numeric variable for the y axis of a scatterplot</h4>
+    <select name="ch4_scatter_y" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in numeric_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+
+    <h4>Please choose a text variable for the x axis of a column chart</h4>
+    <select name="ch4_column_x" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in text_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+    <h4>Please choose a numeric variable for the y axis of a column chart</h4>
+    <select name="ch4_column_y" id="column-select">
+        <option value="" disabled selected>-- Select a column --</option>
+        {% for col in text_cols %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+
+
+
+
+</form>
 {% endblock %}
