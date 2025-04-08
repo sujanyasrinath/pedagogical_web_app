@@ -782,10 +782,18 @@ def create_chapter_4_document(doc, selected_dataset, chapter_4_details, show_ans
         # Summary statistics
         from scipy.stats import trim_mean, mode
         doc.add_paragraph(f"Mean: {final_df[ch4_t1].mean():.2f}")
+
+        # Calculate mode safely
         mode_result = mode(final_df[ch4_t1], nan_policy='omit')
-        mode_array = mode_result.mode
-        mode_value = mode_array[0] if mode_array.size > 0 else "N/A"
+        mode_raw = mode_result.mode
+
+        if hasattr(mode_raw, '__len__') and len(mode_raw) > 0:
+            mode_value = mode_raw[0]
+        else:
+            mode_value = "N/A"
+
         doc.add_paragraph(f"Mode: {mode_value}")
+        
         doc.add_paragraph(f"Median: {final_df[ch4_t1].median():.2f}")
         doc.add_paragraph(f"90% Trimmed Mean: {trim_mean(final_df[ch4_t1], 0.05):.2f}")
         doc.add_paragraph(f"Range: {final_df[ch4_t1].max() - final_df[ch4_t1].min():.2f}")
