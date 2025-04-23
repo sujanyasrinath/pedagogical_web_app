@@ -17,3 +17,5 @@ python-docx
 matplotlib
 gunicorn
 Flask-SQLAlchemy
+seaborn
+rapidfuzz==3.13.0
