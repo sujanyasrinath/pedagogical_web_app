@@ -16,3 +16,4 @@ scipy
 python-docx
 matplotlib
 gunicorn
+Flask-SQLAlchemy
